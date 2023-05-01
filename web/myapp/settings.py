@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 DEFINED_APPS = [
     "cores",
     "transaction",
+    "customer",
 ]
 
 INSTALLED_APPS = [

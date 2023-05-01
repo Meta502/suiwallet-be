@@ -1,37 +1,17 @@
+from django.urls.converters import uuid
 from django.utils import timezone
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.renderers import serializers
-from rest_framework.serializers import ListSerializer
 from rest_framework.views import APIView, Response, status
 from rest_framework import permissions
 
-from cores.constants import TRANSACTION_TYPE_CHOICES, DecimalConstant, SwaggerTag
+from cores.constants import SwaggerTag
+from transaction.serializers.inquiry import InquiryRequestSerializer, InquiryResponseSerializer, TransactionSerializer
 
 
-class InquiryView(APIView):
+class ListInquiryView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
-    class InquiryRequestSerializer(serializers.Serializer):
-        start_date = serializers.DateTimeField(allow_null=True, default=timezone.now() - timezone.timedelta(days=7))
-        end_date = serializers.DateTimeField(allow_null=True, default=timezone.now())
-        filter_type = serializers.ChoiceField(
-            choices=TRANSACTION_TYPE_CHOICES
-        )
-
-    class InquiryResponseSerializer(serializers.Serializer):
-        class TransactionSerializer(serializers.Serializer):
-            id = serializers.UUIDField()
-            transaction_date = serializers.DateTimeField()
-            amount = serializers.DecimalField(
-                max_digits=DecimalConstant.MAX_DIGITS, 
-                decimal_places=DecimalConstant.DECIMAL_PLACES
-            )
-        
-        items = ListSerializer(
-            child=TransactionSerializer()
-        )
-
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -54,4 +34,16 @@ class InquiryView(APIView):
     )
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
+
+class GetInquiryView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    @swagger_auto_schema(
+        responses={
+            "200": TransactionSerializer()
+        },
+        tags=[SwaggerTag.INQUIRY],
+    )
+    def get(self, request, transaction_id: uuid.UUID):
+        pass
 
