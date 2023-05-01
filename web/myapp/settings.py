@@ -29,8 +29,13 @@ SECRET_KEY = 'django-insecure-ltu5g#%==jus32=4htyr*iic+oecmk52=mvit)t+zppqera%eu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "104.197.123.44",
+    "api.suiwallet.ardizza.xyz",
+    "localhost",
+]
 
+CORS_TRUSTED_ORIGINS = ["https://*.ardizza.xyz"]
 
 # Application definition
 
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'drf_yasg',
 ] + DEFINED_APPS
 
@@ -156,3 +162,11 @@ SWAGGER_SETTINGS = {
      }
   }
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'https://suiwallet.ardizza.xyz'    
+]
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
