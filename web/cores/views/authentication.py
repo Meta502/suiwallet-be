@@ -30,3 +30,13 @@ class CustomerRegistrationView(APIView):
             ).data,
             status=status.HTTP_201_CREATED
         )
+
+class CustomerValidationView(APIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get(self, request):
+        return Response({
+            "id": str(request.user.id)
+        })

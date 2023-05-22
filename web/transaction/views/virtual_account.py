@@ -56,8 +56,10 @@ class GetUpdateDeleteVirtualAccountView(APIView):
         },
         tags=[SwaggerTag.VIRTUAL_ACCOUNT]
     )
-    def get(self, request, virtual_account_id: uuid.UUID):
-        return Response(status=status.HTTP_200_OK)
+    def get(self, request, virtual_account_id: str):
+        virtual_account = requests.get(f"{TRANSACTION_SERVICE_URL}/virtual-account/{virtual_account_id}")
+
+        return Response(virtual_account.json(), status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         responses={
@@ -65,8 +67,12 @@ class GetUpdateDeleteVirtualAccountView(APIView):
         },
         tags=[SwaggerTag.VIRTUAL_ACCOUNT]
     )
-    def put(self, request):
-        return Response(status=status.HTTP_201_CREATED)
+    def put(self, request, virtual_account_id: str):
+        virtual_account = requests.put(f"{TRANSACTION_SERVICE_URL}/virtual-account/{virtual_account_id}", json={
+            "userId": str(request.user.id)
+        })
+        print(virtual_account.json())
+        return Response(virtual_account.json(), status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         responses={
@@ -74,6 +80,8 @@ class GetUpdateDeleteVirtualAccountView(APIView):
         },
         tags=[SwaggerTag.VIRTUAL_ACCOUNT]
     )
-    def delete(self, request):
+    def delete(self, request, virtual_account_id: str):
+        virtual_account = requests.delete(f"{TRANSACTION_SERVICE_URL}/virtual-account/withdraw/{virtual_account_id}")
+
         return Response(status=status.HTTP_204_NO_CONTENT)
     
