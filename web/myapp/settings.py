@@ -32,6 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "104.197.123.44",
     "api.suiwallet.ardizza.xyz",
+    "suiwallet.ardizza.xyz",
     "localhost",
 ]
 
