@@ -35,7 +35,7 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
-CORS_TRUSTED_ORIGINS = ["https://*.ardizza.xyz", "http://*.localhost:3000"]
+CORS_TRUSTED_ORIGINS = ["https://*.ardizza.xyz", "http://*.localhost:3000", "https://*.vercel.app"]
 
 # Application definition
 
