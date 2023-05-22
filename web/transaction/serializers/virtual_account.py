@@ -11,9 +11,7 @@ class ItemSerializer(serializers.Serializer):
 class CreateVirtualAccountRequestSerializer(serializers.Serializer):
     title = serializers.CharField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
-    items = serializers.ListField(child=ItemSerializer(), default=list)
     transaction_amount = serializers.DecimalField(max_digits=DecimalConstant.MAX_DIGITS, decimal_places=DecimalConstant.DECIMAL_PLACES)
-    recurring = serializers.BooleanField(default=False)
 
 class VirtualAccountSerializer(serializers.Serializer):
     title = serializers.CharField(allow_blank=True, allow_null=True)

@@ -1,5 +1,6 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
+from cores.views.account import AccountView
 
 from cores.views.authentication import CustomerRegistrationView
 
@@ -8,6 +9,11 @@ AUTHENTICATION_URL_PATTERNS = [
     path("auth/register/", CustomerRegistrationView.as_view(), name="auth_registration")
 ]
 
+ACCOUNT_URL_PATTERNS = [
+    path("account/", AccountView.as_view(), name="account_get")
+]
+
 urlpatterns = [
     *AUTHENTICATION_URL_PATTERNS,
+    *ACCOUNT_URL_PATTERNS,
 ]

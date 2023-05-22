@@ -1,8 +1,14 @@
 from dataclasses import dataclass
-from django.contrib.auth.models import User
+
+from rest_framework.compat import requests
+from cores.models import SuiwalletUser
 from customer.models import Customer, Address
 from rest_framework.authtoken.models import Token
+from os import environ
+
 import datetime
+
+TRANSACTION_SERVICE_URL = environ.get("TRANSACTION_SERVICE_HOST")
 
 @dataclass
 class RegisterCustomerDataClass:
@@ -17,7 +23,7 @@ class RegisterCustomerDataClass:
 class RegisterCustomerService:
     @classmethod
     def run(cls, username: str, password: str, email: str, nik: str, birth_date: datetime.date, phone_number: str, address: str, postal_code: str) -> RegisterCustomerDataClass:
-        user = User.objects.create_user(
+        user = SuiwalletUser.objects.create_user(
             username,
             email,
             password,
@@ -35,6 +41,8 @@ class RegisterCustomerService:
             address_text = address,
             postal_code = postal_code
         )
+
+        requests.post(f"{TRANSACTION_SERVICE_URL}/account/{user.id}")
 
         return RegisterCustomerDataClass(
             username=user.username,

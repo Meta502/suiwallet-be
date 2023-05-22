@@ -1,11 +1,15 @@
 from django.urls.converters import uuid
 from drf_yasg.utils import APIView, status, swagger_auto_schema
 from rest_framework import permissions
+from rest_framework.compat import requests
 from rest_framework.views import Response
 
 from cores.constants import SwaggerTag
 from transaction.serializers.virtual_account import CreateVirtualAccountRequestSerializer, PayVirtualAccountResponseSerializer, VirtualAccountSerializer, ListVirtualAccountResponseSerializer
 
+from os import environ
+
+TRANSACTION_SERVICE_URL = environ.get("TRANSACTION_SERVICE_HOST")
 
 class ListCreateVirtualAccountView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -18,7 +22,17 @@ class ListCreateVirtualAccountView(APIView):
         tags=[SwaggerTag.VIRTUAL_ACCOUNT]
     )
     def post(self, request):
-        pass
+        virtual_account = requests.post(f"{TRANSACTION_SERVICE_URL}/virtual-account/", json={
+            "userId": str(request.user.id),
+            "title": request.data["title"],
+            "description": request.data["description"],
+            "amount": request.data["transaction_amount"],
+        })
+        
+        return Response(
+            virtual_account.json(),
+            status=status.HTTP_201_CREATED
+        )
 
     @swagger_auto_schema(
         responses={
@@ -27,7 +41,11 @@ class ListCreateVirtualAccountView(APIView):
         tags=[SwaggerTag.VIRTUAL_ACCOUNT]
     )
     def get(self, request):
-        pass
+        virtual_accounts = requests.get(f"{TRANSACTION_SERVICE_URL}/virtual-account/account/{request.user.id}")
+
+        return Response(
+            virtual_accounts.json()
+        )
 
 class GetUpdateDeleteVirtualAccountView(APIView):
     permission_classes = [permissions.IsAuthenticated]

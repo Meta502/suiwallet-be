@@ -11,6 +11,7 @@ pika = "*"
 drf-yasg = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+requests = "*"
 
 [dev-packages]
 

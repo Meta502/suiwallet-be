@@ -4,10 +4,13 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView, Response, status
 from rest_framework import permissions
+import requests
 
 from cores.constants import SwaggerTag
 from transaction.serializers.inquiry import InquiryRequestSerializer, InquiryResponseSerializer, TransactionSerializer
+from os import environ
 
+TRANSACTION_SERVICE_URL = environ.get("TRANSACTION_SERVICE_HOST")
 
 class ListInquiryView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -33,7 +36,13 @@ class ListInquiryView(APIView):
         tags=[SwaggerTag.INQUIRY],
     )
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        api_request = requests.get(f"{TRANSACTION_SERVICE_URL}/inquiry/{request.user.id}")
+        
+        data = api_request.json()
+        print(data)
+        print(request.user.id)
+
+        return Response(data, status=status.HTTP_200_OK)
 
 class GetInquiryView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -45,5 +54,7 @@ class GetInquiryView(APIView):
         tags=[SwaggerTag.INQUIRY],
     )
     def get(self, request, transaction_id: uuid.UUID):
-        pass
+        print(request.user)
+
+        return Response()
 

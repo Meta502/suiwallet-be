@@ -1,7 +1,8 @@
 from django.db import models
 
-from django.contrib.auth.models import User
 from rest_framework.serializers import ValidationError
+
+from cores.models import SuiwalletUser
 
 # Create your models here.
 class Address(models.Model):
@@ -21,7 +22,7 @@ class Customer(models.Model):
             raise ValidationError("Nomor telepon ini tidak valid")
 
     user = models.OneToOneField(
-        User,
+        SuiwalletUser,
         on_delete=models.CASCADE,
         primary_key=True,
         related_name="customer",
