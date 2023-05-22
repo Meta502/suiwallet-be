@@ -31,4 +31,15 @@ class TopUpView(APIView):
             top_up.json(),
             status=status.HTTP_201_CREATED,
         )
+
+
+class PayTopUpView(APIView):
+    @swagger_auto_schema()
+    def put(self, request, top_up_id: str):
+        top_up = requests.put(f"{TRANSACTION_SERVICE_URL}/top-up/{top_up_id}")
+
+        return Response(
+            top_up.json(),
+            status=top_up.status_code
+        )
     
